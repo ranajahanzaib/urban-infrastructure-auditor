@@ -1,6 +1,10 @@
 # Dataset & Model Attribution
 
-## 1. Datasets
+## 1. Application Software License
+
+The `urban-infrastructure-auditor` platform source code is licensed under the [MIT License](../LICENSE).
+
+## 2. Datasets
 
 ### A. Construction & Infrastructure Change
 
@@ -20,7 +24,7 @@
 
 ---
 
-## 2. Computer Vision Models
+## 3. Computer Vision Models
 
 ### A. SigLIP 2
 
@@ -38,7 +42,7 @@
 
 ---
 
-## 3. Cartography & Map Tiles
+## 4. Cartography & Map Tiles
 
 - **Basemap Tiles**: OpenStreetMap contributors, CartoDB Positron / Dark Matter.
 - **Tile Attribution**: `© OpenStreetMap contributors © CARTO`.
@@ -46,7 +50,7 @@
 
 ---
 
-## 4. Ethical & Analytical Guardrails
+## 5. Ethical & Analytical Guardrails
 
 1. **No Individual Surveillance or Facial Recognition**: The models and processing pipelines in this platform do not detect, classify, track, or identify human beings, personal vehicles, or private residences.
 2. **Weak Labels vs. Ground Truth**: Machine-generated labels are treated strictly as historical observation evidence, never as unassailable ground truth.

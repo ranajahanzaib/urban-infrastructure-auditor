@@ -3,7 +3,7 @@
 > **Street-Level Infrastructure Intelligence Platform**  
 > Combining street-level imagery, multimodal computer vision embeddings (SigLIP 2 & DINOv2), spatial analysis (PostGIS), temporal change detection, and human verification.
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_15-black)](https://nextjs.org/)
 [![Go](https://img.shields.io/badge/Backend-Go_1.24-00ADD8?logo=go)](https://golang.org)
 [![PostGIS](https://img.shields.io/badge/Spatial-PostGIS_3.4-336791?logo=postgresql)](https://postgis.net/)
@@ -238,7 +238,7 @@ make test-e2e         # Full stack E2E: DB + Vision (8001) + Go (8080) + Web (30
 
 ## 10. License & Attribution
 
-- **Application Code**: Licensed under the [Apache License 2.0](LICENSE).
+- **Application Code**: Licensed under the [MIT License](LICENSE).
 - **Datasets**: Published by EDK-Earth under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Contains imagery and metadata from Mapillary and civic contributors.
 - **Models**:
   - `google/siglip-base-patch16-224` (Google DeepMind, Apache 2.0).
