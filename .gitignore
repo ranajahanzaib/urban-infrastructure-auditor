@@ -56,6 +56,7 @@ pids
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 
 # Firebase
@@ -72,3 +73,18 @@ yarn-error.log*
 
 # Python
 venv
+.venv
+__pycache__
+*.pyc
+
+# Binaries
+bin/
+services/api/bin/
+
+# Heavy Raw Data and Image Downloads
+data/raw/*.csv
+data/raw/*.zip
+data/storage/images/*
+!data/storage/images/.gitkeep
+
+PLAN.md
