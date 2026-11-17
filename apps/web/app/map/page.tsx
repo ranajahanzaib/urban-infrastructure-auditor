@@ -3,7 +3,7 @@
 import { fetchCategories, fetchGeoObservations } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Filter, Images, X } from "lucide-react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
