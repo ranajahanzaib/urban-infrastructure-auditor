@@ -9,10 +9,12 @@ protobuf>=4.25.0
 fastapi>=0.110.0
 uvicorn>=0.28.0
 python-multipart>=0.0.9
+pydantic>=2.0.0
 
 # Data Processing & Storage
 pillow>=10.0.0
 numpy>=1.26.0
 imagehash>=4.3.1
 psycopg[binary]>=3.1.0
+python-dateutil>=2.8.2
 pyyaml>=6.0

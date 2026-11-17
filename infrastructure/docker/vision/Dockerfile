@@ -19,13 +19,15 @@ RUN pip install --no-cache-dir \
     fastapi \
     uvicorn \
     python-multipart \
+    pydantic \
     transformers \
     pillow \
     numpy \
     psycopg[binary] \
     sentencepiece \
     protobuf \
-    imagehash
+    imagehash \
+    python-dateutil
 
 COPY services/vision /app/services/vision
 
