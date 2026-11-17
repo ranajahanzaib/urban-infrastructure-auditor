@@ -12,7 +12,7 @@ setup:
 	python3 -m venv .venv
 	.venv/bin/pip install --upgrade pip
 	.venv/bin/pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-	.venv/bin/pip install fastapi uvicorn python-multipart transformers pillow numpy psycopg[binary] sentencepiece protobuf imagehash
+	.venv/bin/pip install -r requirements.txt
 	@echo "Installing web frontend dependencies with pnpm..."
 	pnpm install
 	@echo "Verifying Go backend..."

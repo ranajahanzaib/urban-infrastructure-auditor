@@ -1,0 +1,18 @@
+# Machine Learning & Computer Vision
+torch>=2.2.0
+torchvision>=0.17.0
+transformers>=4.40.0
+sentencepiece>=0.2.0
+protobuf>=4.25.0
+
+# API Microservice
+fastapi>=0.110.0
+uvicorn>=0.28.0
+python-multipart>=0.0.9
+
+# Data Processing & Storage
+pillow>=10.0.0
+numpy>=1.26.0
+imagehash>=4.3.1
+psycopg[binary]>=3.1.0
+pyyaml>=6.0
