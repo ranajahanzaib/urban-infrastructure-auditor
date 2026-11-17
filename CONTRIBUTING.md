@@ -7,33 +7,43 @@ We welcome contributions of all kinds to improve this project! Here's how you ca
 2. **Clone Your Fork**: Clone the forked repository to your local machine:
 
    ```bash
-   git clone <repo_url>
-   cd repo_dir
+   git clone https://github.com/ranajahanzaib/urban-infrastructure-auditor.git
+   cd urban-infrastructure-auditor
    ```
 
-3. **Create a Branch**: Create a new branch for your feature or bug fix:
+3. **Install Dependencies & Setup**:
 
    ```bash
-   git checkout -b feature-name
+   make setup
    ```
 
-4. **Make Changes**: Make your changes to the codebase. Be sure to follow existing code style and conventions.
-
-5. **Commit Changes**: Commit your changes with a clear and descriptive message:
+4. **Create a Branch**: Create a new branch for your feature or bug fix:
 
    ```bash
-   git commit -m "Add detailed description of the changes"
+   git checkout -b feature/your-feature-name
    ```
 
-6. **Push Changes**: Push your changes to your fork:
+5. **Make Changes**: Make your changes to the codebase, following existing architecture, type-safety, and test coverage standards.
+
+6. **Run Tests**: Verify that all test suites pass:
 
    ```bash
-   git push origin feature-name
+   make test
    ```
 
-7. **Submit a Pull Request**: Open a pull request from your branch to the main repository's branch. Include a detailed description of your changes and the problem they solve.
+7. **Commit Changes**: Commit your changes with a clear and descriptive message:
 
-8. **Review and Feedback**: Participate in the review process. Make any requested changes, and your contribution will be merged!
+   ```bash
+   git commit -m "feat(module): describe the feature or bug fix"
+   ```
+
+8. **Push Changes**: Push your changes to your fork:
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+9. **Submit a Pull Request**: Open a pull request against `main`. Include a detailed description of your changes and reference any related issues.
 
 ### Guidelines
 
