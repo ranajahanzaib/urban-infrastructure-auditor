@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  title: Urban Infrastructure Auditor REST API
+  description: Street-Level Infrastructure Intelligence Platform API combining spatial PostGIS queries, SigLIP 2 cross-modal search, DINOv2 visual similarity, and human verification workflows.
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development API server
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        "200":
+          description: Service is healthy
+  /ready:
+    get:
+      summary: Readiness check endpoint
+      responses:
+        "200":
+          description: Service and database are ready
+
+  /dashboard/summary:
+    get:
+      summary: Retrieve high-level dashboard metrics and dataset statuses
+      responses:
+        "200":
+          description: Dashboard summary metrics
+
+  /dashboard/categories:
+    get:
+      summary: List all infrastructure categories and current counts
+      responses:
+        "200":
+          description: Category list with counts
+
+  /dashboard/timeline:
+    get:
+      summary: Get timeline aggregation of observations by year and month
+      responses:
+        "200":
+          description: Monthly observation timeline
+
+  /dashboard/coverage:
+    get:
+      summary: Get geographic coverage statistics by city and state
+      responses:
+        "200":
+          description: Coverage statistics
+
+  /observations:
+    get:
+      summary: List observations with spatial, temporal, and category filters
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+        - name: category_id
+          in: query
+          schema:
+            type: string
+        - name: category_group
+          in: query
+          schema:
+            type: string
+        - name: verification_status
+          in: query
+          schema:
+            type: string
+        - name: has_image
+          in: query
+          schema:
+            type: boolean
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated observation list
+
+  /observations/{id}:
+    get:
+      summary: Retrieve a single observation by ID with full provenance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detailed observation
+
+  /observations/{id}/neighbors:
+    get:
+      summary: Find spatial neighbors within a specified radius
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: radius_meters
+          in: query
+          schema:
+            type: number
+            default: 500
+      responses:
+        "200":
+          description: Proximate spatial observations
+
+  /observations/{id}/similar:
+    get:
+      summary: Find visually similar observations via DINOv2 cosine similarity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Visually similar observations
+
+  /geo/observations:
+    get:
+      summary: Get GeoJSON points bounded by viewport coordinates
+      parameters:
+        - name: bbox
+          in: query
+          description: minLon,minLat,maxLon,maxLat
+          schema:
+            type: string
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection
+
+  /geo/clusters:
+    get:
+      summary: Get PostGIS grid-based spatial clusters
+      parameters:
+        - name: grid_size
+          in: query
+          schema:
+            type: number
+            default: 0.1
+      responses:
+        "200":
+          description: List of spatial clusters
+
+  /geo/density:
+    get:
+      summary: Get spatial observation density map
+      responses:
+        "200":
+          description: Density distribution
+
+  /geo/compare:
+    post:
+      summary: Compare infrastructure composition across two bounding box regions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bbox_a:
+                  type: array
+                  items:
+                    type: number
+                bbox_b:
+                  type: array
+                  items:
+                    type: number
+      responses:
+        "200":
+          description: Side-by-side area comparison
+
+  /search/visual:
+    post:
+      summary: Execute natural language visual search using SigLIP 2 cross-modal embeddings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  example: "electric vehicle charging equipment"
+                limit:
+                  type: integer
+                  default: 10
+                category_id:
+                  type: string
+      responses:
+        "200":
+          description: Visual search results with similarity scores
+
+  /search/similar-groups:
+    get:
+      summary: List near-duplicate and visually related candidate pairs
+      responses:
+        "200":
+          description: Discovered relation candidates
+
+  /reviews:
+    get:
+      summary: List items in analyst verification queue
+      parameters:
+        - name: queue
+          in: query
+          schema:
+            type: string
+            enum: [unverified, duplicates, uncertain, quarantined]
+      responses:
+        "200":
+          description: Review queue items
+
+  /reviews/{id}:
+    post:
+      summary: Submit human analyst verification decision
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    [
+                      confirm_label,
+                      reject_label,
+                      mark_uncertain,
+                      reassign_category,
+                      confirm_duplicate,
+                      reject_duplicate,
+                    ]
+                analyst_category_id:
+                  type: string
+                notes:
+                  type: string
+                reviewer_id:
+                  type: string
+      responses:
+        "200":
+          description: Review recorded and state updated
+
+  /export/observations.csv:
+    get:
+      summary: Export observations to CSV with active filters
+      responses:
+        "200":
+          description: CSV file download
+
+  /export/observations.geojson:
+    get:
+      summary: Export observations to GeoJSON FeatureCollection
+      responses:
+        "200":
+          description: GeoJSON download
