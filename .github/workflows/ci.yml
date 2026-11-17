@@ -7,27 +7,80 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  web:
+    name: Web Frontend (Next.js & pnpm)
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.6.3
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
-      # Uncomment and adjust the steps below to match your project's setup
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      # - name: Install dependencies
-      #   run: npm ci
+      - name: Type check and build web app
+        run: pnpm --filter web build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
 
-      # - name: Lint
-      #   run: npm run lint
+  api:
+    name: Backend API (Go)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # - name: Run tests
-      #   run: npm test
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+          cache-dependency-path: services/api/go.sum
 
-      # - name: Build
-      #   run: npm run build
+      - name: Verify modules
+        run: go mod verify
+
+      - name: Compile API binary
+        run: go build -v ./cmd/server
+
+      - name: Run unit tests
+        run: go test -v ./tests/...
+
+  ml-and-ingestion:
+    name: ML & Ingestion Pipeline (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install fastapi uvicorn python-multipart transformers pillow numpy psycopg[binary] sentencepiece protobuf imagehash
+
+      - name: Run Ingestion unit tests
+        run: python -m unittest ingestion/tests/test_ingestion.py
+
+      - name: Run Vision unit tests
+        run: |
+          python -c "from transformers import AutoProcessor, AutoModel, AutoImageProcessor; AutoProcessor.from_pretrained('google/siglip-base-patch16-224'); AutoModel.from_pretrained('google/siglip-base-patch16-224'); AutoImageProcessor.from_pretrained('facebook/dinov2-base'); AutoModel.from_pretrained('facebook/dinov2-base')"
+          TRANSFORMERS_OFFLINE=1 HF_HUB_OFFLINE=1 python -m unittest services/vision/tests/test_vision.py
