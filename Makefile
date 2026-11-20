@@ -30,8 +30,8 @@ migrate:
 
 import:
 	@echo "Ingesting Hugging Face datasets..."
-	$(PYTHON) -m ingestion import-dataset --source data/raw/construction.csv --dataset-id construction-infrastructure-change --limit 5000
-	$(PYTHON) -m ingestion import-dataset --source data/raw/green_infrastructure.csv --dataset-id urban-climate-green-infrastructure --limit 5000
+	$(PYTHON) -m ingestion import construction --limit 5000
+	$(PYTHON) -m ingestion import green-infrastructure --limit 5000
 
 embed:
 	@echo "Extracting SigLIP and DINOv2 embeddings & discovering relations..."

@@ -256,3 +256,19 @@ class BatchEmbedder:
                     )
                 conn.commit()
                 logger.info("Candidate relations recorded successfully.")
+
+
+if __name__ == "__main__":
+    import argparse
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+    parser = argparse.ArgumentParser(description="Batch embedder for observations using SigLIP 2 and DINOv2")
+    parser.add_argument("--batch-size", type=int, default=50, help="Batch size for embedding inference")
+    parser.add_argument("--max-items", type=int, default=None, help="Maximum number of items to embed")
+    parser.add_argument("--storage-dir", default="data/storage", help="Storage directory for images")
+    parser.add_argument("--db-url", default=DEFAULT_DB_URL, help="Database connection URL")
+    args = parser.parse_args()
+
+    embedder = BatchEmbedder(db_url=args.db_url, storage_dir=args.storage_dir)
+    res = embedder.process_pending(batch_size=args.batch_size, max_items=args.max_items)
+    print("Embedding job completed:", res)
+
