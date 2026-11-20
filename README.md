@@ -13,6 +13,12 @@
 
 ---
 
+<p align="center">
+  <img src="docs/screenshots/overview.png" alt="Urban Infrastructure Auditor Executive Dashboard" width="100%">
+</p>
+
+---
+
 ## 1. Product Vision & Core Distinction
 
 `urban-infrastructure-auditor` is an enterprise geospatial observation ledger and visual intelligence platform designed for civil infrastructure auditors, smart-city engineers, urban planning agencies, and environmental analytics teams.
@@ -44,11 +50,60 @@
 
 ---
 
-## 2. System Architecture
+## 2. Visual Tour & Platform Features
+
+### Interactive Geospatial Map (`/map`)
+
+Interactive MapLibre GL visualization with PostGIS spatial clustering, bounding-box queries, and real-time inspector drawer.
+![Interactive Geospatial Map](docs/screenshots/map.png)
+
+### Multimodal Semantic Search (`/visual-search`)
+
+Natural language visual discovery powered by Google DeepMind SigLIP 2 cross-modal embeddings (768-d) and pgvector HNSW cosine indexing.
+![Multimodal Visual Search](docs/screenshots/visual-search.png)
+
+### DINOv2 Visual Similarity & Near-Duplicate Detection (`/similarity`)
+
+Side-by-side comparison of candidate pairs discovered via Meta AI DINOv2 visual features, identifying near-duplicates (cosine > 0.90) and repeat observations.
+![DINOv2 Visual Similarity & Near-Duplicates](docs/screenshots/similarity.png)
+
+### Observation Detail & 5-Tab Inspector (`/observations/[id]`)
+
+Deep-dive inspection covering observation provenance, vector specifications, PostGIS spatial neighbors, visual similarity candidates, and immutable audit events.
+![Observation Detail Inspector](docs/screenshots/observation-detail.png)
+
+### Observation Catalog & Ledger (`/observations`)
+
+Filterable, searchable catalog supporting multi-category queries, geographic filters, staleness tiers, and thumbnail inspection.
+![Observation Explorer](docs/screenshots/observations.png)
+
+### Analyst Verification & Audit State Machine (`/review`)
+
+Human-in-the-loop workflow allowing civil auditors to verify weak machine labels, reassign categories, mark ambiguous evidence, and track immutable audit logs.
+![Analyst Verification Queue](docs/screenshots/review.png)
+
+### Temporal Analysis & Staleness Tracking (`/timeline`)
+
+Chronological frequency graphs and staleness stratification (Recent < 1yr, Aging 1-3yr, Stale > 3yr) to plan field reinspection campaigns.
+![Temporal Timeline](docs/screenshots/timeline.png)
+
+### Geographic Area Comparison (`/compare`)
+
+Side-by-side comparative analysis of infrastructure distributions and density between two distinct geographic bounding boxes or jurisdictions.
+![Geographic Area Comparison](docs/screenshots/compare.png)
+
+### Data Sources & License Provenance (`/data-sources`)
+
+Dataset-level transparency detailing upstream Hugging Face repositories, Creative Commons CC BY 4.0 licenses, and ingestion job metrics.
+![Data Sources and Provenance](docs/screenshots/data-sources.png)
+
+---
+
+## 3. System Architecture
 
 ```mermaid
 flowchart TD
-    subgraph UI ["Next.js 15 Web Application (Port 3000)"]
+    subgraph UI ["Next.js 15 Web Application (Port 3000 / 3001)"]
         Dash[Dashboard & KPIs]
         Map[MapLibre GL Map]
         Obs[Observation Explorer]
@@ -87,7 +142,7 @@ flowchart TD
 
 ---
 
-## 3. Computer Vision Pipeline
+## 4. Computer Vision Pipeline
 
 ```mermaid
 flowchart LR
@@ -102,14 +157,14 @@ flowchart LR
         ImageIn[Street-Level Photo] --> DINOProc[DINOv2 Image Processor]
         DINOProc --> DINOEmb["768-d Vision Vector (CLS Token)"]
         DINOEmb --> HNSW2["pgvector Cosine Pairwise Matrix"]
-        HNSW2 --> NearDup["Cosine > 0.95: Near Duplicates"]
-        HNSW2 --> Similar["Cosine 0.85 - 0.95: Visual Neighbors"]
+        HNSW2 --> NearDup["Cosine > 0.90: Near Duplicates"]
+        HNSW2 --> Similar["Cosine 0.80 - 0.90: Visual Neighbors"]
     end
 ```
 
 ---
 
-## 4. Observation Verification Lifecycle
+## 5. Observation Verification Lifecycle
 
 ```mermaid
 stateDiagram-v2
@@ -130,17 +185,17 @@ stateDiagram-v2
 
 ---
 
-## 5. Technology Stack
+## 6. Technology Stack
 
-- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, MapLibre GL JS, Recharts, TanStack Query, Lucide Icons.
-- **Backend**: Go 1.24, Chi router, pgx/v5 connection pool, REST API, JSON schemas.
-- **Computer Vision**: Python 3.11+, PyTorch, Hugging Face Transformers (`google/siglip-base-patch16-224`, `facebook/dinov2-base`), Pillow, NumPy, imagehash.
-- **Database & Geospatial**: PostgreSQL 16, PostGIS 3.4 (`geometry(Point, 4326)`), pgvector 0.8 (`vector(768)` with HNSW cosine indexes).
+- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, MapLibre GL JS 6, Recharts, TanStack Query, Lucide Icons.
+- **Backend API**: Go 1.24, Chi router, `jackc/pgx/v5` connection pool, REST API, JSON schemas.
+- **Computer Vision Service**: Python 3.11+, PyTorch (MPS / CPU), Hugging Face Transformers (`google/siglip-base-patch16-224`, `facebook/dinov2-base`), Pillow, NumPy, imagehash, FastAPI, Uvicorn.
+- **Database & Geospatial**: PostgreSQL 16, PostGIS 3.4 (`geometry(Point, 4326)`), pgvector 0.8 (`vector(768)` with HNSW cosine distance indexes).
 - **Storage**: S3-compatible local disk storage engine with path traversal protections.
 
 ---
 
-## 6. Real-World Datasets
+## 7. Real-World Datasets
 
 The platform is integrated with two real-world datasets published by **EDK-Earth** under **CC BY 4.0**:
 
@@ -151,11 +206,11 @@ The platform is integrated with two real-world datasets published by **EDK-Earth
 
 ---
 
-## 7. Quickstart Guide
+## 8. Quickstart Guide
 
 ### Prerequisites
 
-- Docker & Docker Compose **or** local Go 1.24, Python 3.11+, Node.js 20+ (pnpm 10+), PostgreSQL 16 with PostGIS & pgvector.
+- Docker & Docker Compose **or** local Go 1.24+, Python 3.11+, Node.js 20+ (pnpm 10+), PostgreSQL 16 with PostGIS & pgvector.
 
 ### Option A: Complete Docker Setup
 
@@ -164,7 +219,7 @@ The platform is integrated with two real-world datasets published by **EDK-Earth
 git clone https://github.com/ranajahanzaib/urban-infrastructure-auditor.git
 cd urban-infrastructure-auditor
 
-# Start all services (Database, Vision microservice, Go API, Web frontend)
+# Start all services (PostgreSQL + PostGIS + pgvector, Vision service, Go API, Next.js web)
 docker compose up -d
 
 # Open in browser:
@@ -182,29 +237,31 @@ docker compose up -d db
 # 2. Setup Python environment and install dependencies
 make setup
 
-# 3. Apply database migrations
+# 3. Apply database schema migrations
 make migrate
 
-# 4. Ingest real datasets (5,000 records each with resolved images)
+# 4. Ingest real datasets (1,000 records per dataset with resolved street imagery)
 make import
 
-# 5. Extract SigLIP and DINOv2 embeddings & relations
+# 5. Extract SigLIP 2 and DINOv2 embeddings & discover candidate relations
 make embed
 
-# 6. Run the services in separate terminals:
-# Terminal 1: Vision Microservice
+# 6. Run the microservices:
+# Terminal 1: Vision Microservice (FastAPI on Port 8001)
 make run-vision
-# Terminal 2: Go Backend API
+
+# Terminal 2: Go Backend API (Chi on Port 8080)
 make run-api
-# Terminal 3: Next.js Frontend
+
+# Terminal 3: Next.js Web Frontend (Port 3000 / 3001)
 make run-web
 ```
 
 ---
 
-## 8. Automated Testing
+## 9. Automated Testing & Verification
 
-The platform includes full unit, integration, and end-to-end test suites:
+The platform includes full unit, integration, and end-to-end test suites covering all layers of the stack:
 
 ```bash
 # Run all test suites
@@ -212,31 +269,52 @@ make test
 
 # Or run individual suites:
 make test-ingestion   # Coordinate validation, date parsing, taxonomy normalization
-make test-vision      # SigLIP & DINOv2 dimensions, L2 normalization, cosine similarity
+make test-vision      # SigLIP 2 & DINOv2 dimensions, L2 normalization, cosine similarity
 make test-api         # Go API queries, pgvector search, PostGIS spatial clusters
-make test-e2e         # Full stack E2E: DB + Vision (8001) + Go (8080) + Web (3000)
+make test-e2e         # Full stack E2E: DB + Vision (8001) + Go (8080) + Web
 ```
 
----
+### Verified Test Results
 
-## 9. Platform Views & Features
-
-| View                         | Route                | Primary Capability                                                                |
-| ---------------------------- | -------------------- | --------------------------------------------------------------------------------- |
-| **Executive Dashboard**      | `/`                  | Real-time observation counts, staleness breakdown, category distributions.        |
-| **Interactive Map**          | `/map`               | MapLibre GL cluster view, bounding-box spatial filtering, inspection drawer.      |
-| **Observation Ledger**       | `/observations`      | Paginated catalog, multi-category filters, provenance inspector.                  |
-| **Observation Detail**       | `/observations/[id]` | 5-tab inspector: Provenance, Vector Specs, Spatial Neighbors, Similar, Audit Log. |
-| **Multimodal Visual Search** | `/visual-search`     | Natural-language semantic search via SigLIP 2 cross-modal embeddings.             |
-| **Similarity & Duplicates**  | `/similarity`        | DINOv2-driven candidate discovery and side-by-side comparison.                    |
-| **Temporal Timeline**        | `/timeline`          | Multi-year chronological trends, seasonal rhythms, and reinspection queues.       |
-| **Analyst Review**           | `/review`            | Human verification queues (unverified, duplicates, uncertain, quarantined).       |
-| **Geographic Comparison**    | `/compare`           | Side-by-side infrastructure comparison of two geographic areas.                   |
-| **Data Sources**             | `/data-sources`      | Dataset provenance, CC BY 4.0 licenses, and ingestion status.                     |
+| Test Suite       | Scope                     | Result         | Details                                                                 |
+| :--------------- | :------------------------ | :------------- | :---------------------------------------------------------------------- |
+| `test-ingestion` | Python Ingestion Pipeline | **PASS (8/8)** | Bounding-box validation, date normalizers, category mapping             |
+| `test-vision`    | SigLIP 2 & DINOv2 Models  | **PASS (4/4)** | 768-d unit vectors, cosine similarity, model inference                  |
+| `test-api`       | Go Backend & PostgreSQL   | **PASS (4/4)** | pgvector HNSW queries, PostGIS spatial clusters, relation matrices      |
+| `test-e2e`       | Full Stack E2E System     | **PASS (9/9)** | API health, OpenAPI 3.0.3, visual search, review workflow, Web HTTP 200 |
 
 ---
 
-## 10. License & Attribution
+## 10. Platform Views & API Routes
+
+| View                         | Web Route            | API Endpoint                        | Primary Capability                                                                |
+| :--------------------------- | :------------------- | :---------------------------------- | :-------------------------------------------------------------------------------- |
+| **Executive Dashboard**      | `/`                  | `GET /api/v1/dashboard/summary`     | Real-time observation counts, staleness breakdown, category distributions.        |
+| **Interactive Map**          | `/map`               | `GET /api/v1/geo/observations`      | MapLibre GL cluster view, bounding-box spatial filtering, inspection drawer.      |
+| **Observation Ledger**       | `/observations`      | `GET /api/v1/observations`          | Paginated catalog, multi-category filters, provenance inspector.                  |
+| **Observation Detail**       | `/observations/[id]` | `GET /api/v1/observations/{id}`     | 5-tab inspector: Provenance, Vector Specs, Spatial Neighbors, Similar, Audit Log. |
+| **Multimodal Visual Search** | `/visual-search`     | `POST /api/v1/search/visual`        | Natural-language semantic search via SigLIP 2 cross-modal embeddings.             |
+| **Similarity & Duplicates**  | `/similarity`        | `GET /api/v1/search/similar-groups` | DINOv2-driven candidate discovery and side-by-side comparison.                    |
+| **Temporal Timeline**        | `/timeline`          | `GET /api/v1/dashboard/timeline`    | Multi-year chronological trends, seasonal rhythms, and reinspection queues.       |
+| **Analyst Review**           | `/review`            | `POST /api/v1/reviews/{id}`         | Human verification queues (unverified, duplicates, uncertain, quarantined).       |
+| **Geographic Comparison**    | `/compare`           | `POST /api/v1/geo/compare`          | Side-by-side infrastructure comparison of two geographic areas.                   |
+| **Data Sources**             | `/data-sources`      | `GET /api/v1/datasets`              | Dataset provenance, CC BY 4.0 licenses, and ingestion status.                     |
+
+---
+
+## 11. Reproducing Screenshots
+
+Showcase screenshots are generated directly from the live application using Playwright:
+
+```bash
+node scripts/capture_screenshots.mjs
+```
+
+Screenshots are saved in [`docs/screenshots/`](docs/screenshots/).
+
+---
+
+## 12. License & Attribution
 
 - **Application Code**: Licensed under the [MIT License](LICENSE).
 - **Datasets**: Published by EDK-Earth under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Contains imagery and metadata from Mapillary and civic contributors.
