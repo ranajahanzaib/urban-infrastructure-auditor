@@ -10,10 +10,11 @@ Validates the full stack:
 import unittest
 import urllib.request
 import json
+import os
 
-API_BASE = "http://localhost:8080/api/v1"
-VISION_BASE = "http://localhost:8001"
-WEB_BASE = "http://localhost:3000"
+API_BASE = os.getenv("API_BASE", "http://localhost:8080/api/v1")
+VISION_BASE = os.getenv("VISION_BASE", "http://localhost:8001")
+WEB_BASE = os.getenv("WEB_BASE", "http://localhost:3001")
 
 def fetch_json(url: str, method: str = "GET", data: dict = None):
     req = urllib.request.Request(url, method=method)
