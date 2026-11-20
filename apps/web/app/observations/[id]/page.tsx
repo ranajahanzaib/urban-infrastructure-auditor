@@ -46,29 +46,33 @@ export default function ObservationDetailPage() {
     queryFn: fetchCategories,
   });
 
-  const { data: neighbors = [] } = useQuery({
+  const { data: rawNeighbors = [] } = useQuery({
     queryKey: ["neighbors", id],
     queryFn: () => fetchNeighbors(id),
     enabled: !!obs,
   });
+  const neighbors = rawNeighbors || [];
 
-  const { data: similar = [] } = useQuery({
+  const { data: rawSimilar = [] } = useQuery({
     queryKey: ["similar", id],
     queryFn: () => fetchSimilar(id),
     enabled: !!obs && obs.image_availability === "available",
   });
+  const similar = rawSimilar || [];
 
-  const { data: history = [] } = useQuery({
+  const { data: rawHistory = [] } = useQuery({
     queryKey: ["history", id],
     queryFn: () => fetchHistory(id),
     enabled: !!obs,
   });
+  const history = rawHistory || [];
 
-  const { data: auditEvents = [] } = useQuery({
+  const { data: rawAuditEvents = [] } = useQuery({
     queryKey: ["review-history", id],
     queryFn: () => fetchReviewHistory(id),
     enabled: !!obs,
   });
+  const auditEvents = rawAuditEvents || [];
 
   const reviewMutation = useMutation({
     mutationFn: (actionData: {

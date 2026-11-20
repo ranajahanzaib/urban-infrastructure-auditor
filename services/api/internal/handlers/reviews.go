@@ -284,7 +284,7 @@ func (h *ReviewHandler) GetReviewHistory(w http.ResponseWriter, r *http.Request)
 	}
 	defer rows.Close()
 
-	var events []models.ReviewEvent
+	events := make([]models.ReviewEvent, 0)
 	for rows.Next() {
 		var ev models.ReviewEvent
 		var prevBytes, newBytes []byte

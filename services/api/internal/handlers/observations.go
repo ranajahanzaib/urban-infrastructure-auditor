@@ -282,7 +282,7 @@ func (h *ObservationHandler) GetNeighbors(w http.ResponseWriter, r *http.Request
 	}
 	defer rows.Close()
 
-	var neighbors []models.Observation
+	neighbors := make([]models.Observation, 0)
 	for rows.Next() {
 		var obs models.Observation
 		if err := rows.Scan(
@@ -333,7 +333,7 @@ func (h *ObservationHandler) GetSimilar(w http.ResponseWriter, r *http.Request) 
 	}
 	defer rows.Close()
 
-	var similar []models.Observation
+	similar := make([]models.Observation, 0)
 	for rows.Next() {
 		var obs models.Observation
 		if err := rows.Scan(
@@ -382,7 +382,7 @@ func (h *ObservationHandler) GetHistory(w http.ResponseWriter, r *http.Request) 
 	}
 	defer rows.Close()
 
-	var history []models.Observation
+	history := make([]models.Observation, 0)
 	for rows.Next() {
 		var obs models.Observation
 		if err := rows.Scan(

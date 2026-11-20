@@ -213,19 +213,22 @@ export async function fetchNeighbors(
     `${BASE_URL}/api/v1/observations/${id}/neighbors?radius=${radiusMeters}`,
   );
   if (!res.ok) throw new Error("Failed to fetch spatial neighbors");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
 
 export async function fetchSimilar(id: string): Promise<Observation[]> {
   const res = await fetch(`${BASE_URL}/api/v1/observations/${id}/similar`);
   if (!res.ok) throw new Error("Failed to fetch similar observations");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
 
 export async function fetchHistory(id: string): Promise<Observation[]> {
   const res = await fetch(`${BASE_URL}/api/v1/observations/${id}/history`);
   if (!res.ok) throw new Error("Failed to fetch history candidates");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
 
 export async function fetchGeoObservations(params: {
@@ -364,17 +367,20 @@ export async function submitReview(
 export async function fetchReviewHistory(id: string): Promise<any[]> {
   const res = await fetch(`${BASE_URL}/api/v1/reviews/${id}/history`);
   if (!res.ok) throw new Error("Failed to fetch review history");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
 
 export async function fetchDatasets(): Promise<Dataset[]> {
   const res = await fetch(`${BASE_URL}/api/v1/datasets`);
   if (!res.ok) throw new Error("Failed to fetch datasets");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
 
 export async function fetchImportJobs(): Promise<any[]> {
   const res = await fetch(`${BASE_URL}/api/v1/import-jobs`);
   if (!res.ok) throw new Error("Failed to fetch import jobs");
-  return res.json();
+  const data = await res.json();
+  return data || [];
 }
