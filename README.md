@@ -314,11 +314,23 @@ Screenshots are saved in [`docs/screenshots/`](docs/screenshots/).
 
 ---
 
-## 12. License & Attribution
+## 12. Attribution
 
-- **Application Code**: Licensed under the [MIT License](LICENSE).
 - **Datasets**: Published by EDK-Earth under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). Contains imagery and metadata from Mapillary and civic contributors.
 - **Models**:
   - `google/siglip-base-patch16-224` (Google DeepMind, Apache 2.0).
   - `facebook/dinov2-base` (Meta AI, Apache 2.0).
 - Detailed attribution is documented in [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md).
+
+
+## 13. License & Custom Work
+
+[![Hire me](https://img.shields.io/badge/Open%20to%20work-work%40withrana.com-brightgreen)](mailto:work@withrana.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-workwithrana-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/workwithrana)
+[![Upwork](https://img.shields.io/badge/Upwork-Hire%20Me-14A800?style=flat&logo=upwork&logoColor=white)](https://www.upwork.com/freelancers/~01bbcf6edb91a8df5f)
+[![Contra](https://img.shields.io/badge/Contra-Hire%20Me-000000?style=flat)](https://contra.com/ranajahanzaib/)
+
+**License:** MIT, see [LICENSE](LICENSE). Free for personal and commercial use.
+
+**Author:** Rana Jahanzaib
+
+**Need this built for your stack?** Email me what you're working on: work@withrana.com
